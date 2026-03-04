@@ -1,0 +1,359 @@
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_custom.dart' as date_symbol_data_custom;
+import 'package:intl/date_symbols.dart' as intl;
+import 'package:intl/intl.dart' as intl;
+
+const kurdishLocaleDatePatterns = {
+  'd': 'd',
+  'E': 'ccc',
+  'EEEE': 'cccc',
+  'LLL': 'MM',
+  'LLLL': 'MM',
+  'M': 'M',
+  'Md': 'd/M',
+  'MEd': 'EEE d/M',
+  'MMM': 'MM',
+  'MMMd': 'd/MM',
+  'MMMEd': 'EEE d/MM',
+  'MMMM': 'MM',
+  'MMMMd': 'd/MMMM',
+  'MMMMEEEEd': 'EEEE d/MMMM',
+  'QQQ': 'QQQ',
+  'QQQQ': 'QQQQ',
+  'y': 'y',
+  'yM': 'M/y',
+  'yMd': 'd/M/y',
+  'yMEd': 'EEE d/MM/y',
+  'yMMM': 'MMM y',
+  'yMMMd': 'd/MMM y',
+  'yMMMEd': 'EEE d/MMM y',
+  'yMMMM': 'MMMM y',
+  'yMMMMd': 'd/MMMM y',
+  'yMMMMEEEEd': 'EEEE d/MMMM y',
+  'yQQQ': 'QQQ y',
+  'yQQQQ': 'QQQQ y',
+  'H': 'HH',
+  'Hm': 'HH:mm',
+  'Hms': 'HH:mm:ss',
+  'j': 'HH',
+  'jm': 'HH:mm',
+  'jms': 'HH:mm:ss',
+  'jmv': 'HH:mm v',
+  'jmz': 'HH:mm z',
+  'jz': 'HH z',
+  'm': 'm',
+  'ms': 'mm:ss',
+  's': 's',
+  'v': 'v',
+  'z': 'z',
+  'zzzz': 'zzzz',
+  'ZZZZ': 'ZZZZ',
+};
+
+const kuDateSymbols2 = {
+  'NAME': 'ckb',
+  'ERAS': ['پز', 'ز'],
+  'ERANAMES': ['پێش زاینی', 'زاینی'],
+  'NARROWMONTHS': [
+    '١',
+    '٢',
+    '٣',
+    '٤',
+    '٥',
+    '٦',
+    '٧',
+    '٨',
+    '٩',
+    '١٠',
+    '١١',
+    '١٢',
+  ],
+  'STANDALONENARROWMONTHS': [
+    '١',
+    '٢',
+    '٣',
+    '٤',
+    '٥',
+    '٦',
+    '٧',
+    '٨',
+    '٩',
+    '١٠',
+    '١١',
+    '١٢',
+  ],
+  'MONTHS': [
+    '١',
+    '٢',
+    '٣',
+    '٤',
+    '٥',
+    '٦',
+    '٧',
+    '٨',
+    '٩',
+    '١٠',
+    '١١',
+    '١٢',
+  ],
+  'STANDALONEMONTHS': [
+    '١',
+    '٢',
+    '٣',
+    '٤',
+    '٥',
+    '٦',
+    '٧',
+    '٨',
+    '٩',
+    '١٠',
+    '١١',
+    '١٢',
+  ],
+  'SHORTMONTHS': [
+    '١',
+    '٢',
+    '٣',
+    '٤',
+    '٥',
+    '٦',
+    '٧',
+    '٨',
+    '٩',
+    '١٠',
+    '١١',
+    '١٢',
+  ],
+  'STANDALONESHORTMONTHS': [
+    '١',
+    '٢',
+    '٣',
+    '٤',
+    '٥',
+    '٦',
+    '٧',
+    '٨',
+    '٩',
+    '١٠',
+    '١١',
+    '١٢',
+  ],
+  'WEEKDAYS': [
+    'یەکشەممە',
+    'دووشەممە',
+    'سێشەممە',
+    'چوارشەممە',
+    'پێنجشەممە',
+    'هەینی',
+    'شەممە'
+  ],
+  'STANDALONEWEEKDAYS': [
+    'یەکشەممە',
+    'دووشەممە',
+    'سێشەممە',
+    'چوارشەممە',
+    'پێنجشەممە',
+    'هەینی',
+    'شەممە'
+  ],
+  'SHORTWEEKDAYS': [
+    'یەکشەم',
+    'دووشەم',
+    'سێشەم',
+    'چوارشەم',
+    'پێنجشەم',
+    'هەینی',
+    'شەممە'
+  ],
+  'STANDALONESHORTWEEKDAYS': [
+    'یەکشەم',
+    'دووشەم',
+    'سێشەم',
+    'چوارشەم',
+    'پێنجشەم',
+    'هەینی',
+    'شەممە'
+  ],
+  'NARROWWEEKDAYS': ['ی', 'د', 'س', 'چ', 'پ', 'ه', 'ش'],
+  'STANDALONENARROWWEEKDAYS': ['ی', 'د', 'س', 'چ', 'پ', 'ه', 'ش'],
+  'SHORTQUARTERS': ['چ١', 'چ٢', 'چ٣', 'چ٤'],
+  'QUARTERS': ['چارەکی یەکەم', 'چارەکی دووەم', 'چارەکی سێیەم', 'چارەکی چوارەم'],
+  'AMPMS': ['پ.ن', 'د.ن'],
+  'DATEFORMATS': [
+    'EEEE، d MMMM y',
+    'd MMMM y',
+    'dd‏/MM‏/y',
+    'd‏/M‏/y',
+  ],
+  'TIMEFORMATS': [
+    'h:mm:ss a zzzz',
+    'h:mm:ss a z',
+    'h:mm:ss a',
+    'h:mm a',
+  ],
+  'AVAILABLEFORMATS': null,
+  'DATETIMEFORMATS': [
+    '{1} {0}',
+    '{1} {0}',
+    '{1} {0}',
+    '{1} {0}',
+  ],
+  'ZERODIGIT': '٠',
+  'FIRSTDAYOFWEEK': 5,
+  'WEEKENDRANGE': [4, 5],
+  'FIRSTWEEKCUTOFFDAY': 3
+};
+
+class KurdishCupertinoLocalizationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
+  const KurdishCupertinoLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'ckb' || locale.languageCode == 'krm';
+
+  @override
+  Future<CupertinoLocalizations> load(Locale locale) async {
+    final String localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    date_symbol_data_custom.initializeDateFormattingCustom(
+      locale: localeName,
+      patterns: kurdishLocaleDatePatterns,
+      symbols: intl.DateSymbols.deserializeFromMap(kuDateSymbols2),
+    );
+
+    return SynchronousFuture<CupertinoLocalizations>(
+      KurdishCupertinoLocalizations(
+        weekdayFormat: intl.DateFormat.EEEE(localeName),
+        localeName: localeName,
+        decimalFormat: intl.NumberFormat('#,##0.###', 'ar'),
+        fullYearFormat: intl.DateFormat('y', localeName),
+        dayFormat: intl.DateFormat('d', localeName),
+        doubleDigitMinuteFormat: intl.DateFormat('mm', localeName),
+        mediumDateFormat: intl.DateFormat('EEE, MMM d', localeName),
+        singleDigitHourFormat: intl.DateFormat('h', localeName),
+        singleDigitMinuteFormat: intl.DateFormat('m', localeName),
+        singleDigitSecondFormat: intl.DateFormat('s', localeName),
+      ),
+    );
+  }
+
+  @override
+  bool shouldReload(KurdishCupertinoLocalizationsDelegate old) => false;
+}
+
+class KurdishCupertinoLocalizations extends GlobalCupertinoLocalizations {
+  const KurdishCupertinoLocalizations({
+    super.localeName = 'ckb',
+    required super.fullYearFormat,
+    required super.mediumDateFormat,
+    required super.decimalFormat,
+    required super.dayFormat,
+    required super.doubleDigitMinuteFormat,
+    required super.singleDigitHourFormat,
+    required super.singleDigitMinuteFormat,
+    required super.singleDigitSecondFormat,
+    required super.weekdayFormat,
+  });
+
+  @override
+  String get alertDialogLabel => r'ئاگادارکردنەوە';
+
+  @override
+  String get anteMeridiemAbbreviation => r'پ.ن';
+
+  @override
+  String get copyButtonLabel => r'کۆپی';
+
+  @override
+  String get cutButtonLabel => r'بڕین';
+
+  @override
+  String get modalBarrierDismissLabel => r'لادان';
+
+  @override
+  String get pasteButtonLabel => r'پەیست';
+
+  @override
+  String get postMeridiemAbbreviation => r'د.ن';
+
+  @override
+  String get selectAllButtonLabel => r'دیاریکردنی هەموو';
+
+  static const LocalizationsDelegate<CupertinoLocalizations> delegate =
+      KurdishCupertinoLocalizationsDelegate();
+
+  @override
+  String get datePickerDateOrderString => "dmy";
+
+  @override
+  String get datePickerDateTimeOrderString => "date_time_dayPeriod";
+
+  @override
+  String? get datePickerHourSemanticsLabelOther => "کاتژمێری هەڵبژاردنی بەروار";
+
+  @override
+  String? get datePickerMinuteSemanticsLabelOther => "خولەکی هەڵبژاردنی بەروار";
+
+  @override
+  String get searchTextFieldPlaceholderLabel => "گەڕان";
+
+  @override
+  String get tabSemanticsLabelRaw => "ماناسازی تاب";
+
+  @override
+  String? get timerPickerHourLabelOther => "هەڵبژێرەری کاتژمێر";
+
+  @override
+  String? get timerPickerMinuteLabelOther => "هەڵبژێرەری خولەک";
+
+  @override
+  String? get timerPickerSecondLabelOther => "هەڵبژێرەری چرکە";
+
+  @override
+  String get todayLabel => "ئەمڕۆ";
+
+  @override
+  String get noSpellCheckReplacementsLabel =>
+      "هیچ جێگرەوەیەکی پشکنینی ڕێنووسی نییە";
+
+  @override
+  String get lookUpButtonLabel => 'بە دوادا گەڕان';
+
+  @override
+  String get menuDismissLabel => 'بەلاوە نان';
+
+  @override
+  String get searchWebButtonLabel => 'گەڕان لە وێب';
+
+  @override
+  String get shareButtonLabel => 'هاوبەشکردن';
+
+  @override
+  String get clearButtonLabel => 'سڕینەوە';
+
+  @override
+  String get backButtonLabel => 'گەڕانەوە';
+
+  @override
+  String get cancelButtonLabel => 'لابردن';
+
+  @override
+  String get collapsedHint => 'داخستن';
+
+  @override
+  String get expandedHint => 'کردنەوە';
+
+  @override
+  String get expansionTileCollapsedHint => 'پیشاندانی زیاتر';
+
+  @override
+  String get expansionTileCollapsedTapHint => 'کردنەوە';
+
+  @override
+  String get expansionTileExpandedHint => 'پیشاندانی کەمتر';
+
+  @override
+  String get expansionTileExpandedTapHint => 'داخستنەوە';
+}
